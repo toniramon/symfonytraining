@@ -1,7 +1,7 @@
 version: "3"
 services:
-  nginx:
-    container_name: nginx
+  nginx_symfony_training:
+    container_name: nginx_symfony_training
     image: jwilder/nginx-proxy:alpine
     ports:
       - "80:80"
@@ -11,19 +11,19 @@ services:
     networks:
       - symfonytraining
 
-  symfony:
-    container_name: symfony
+  symfony_training:
+    container_name: symfony_training
     build:
-      context: ./php
+      context: ./docker/php
       args:
         - DOCUMENT_ROOT=/var/www/html
         - UID=${UID}
     volumes:
       - ${SYMFONY_ROOT_DIRECTORY}:/var/www/html:cached
-      - ./php/settings/php.ini:/usr/local/etc/php/conf.d/custom.ini
+      - ./docker/php/settings/php.ini:/usr/local/etc/php/conf.d/custom.ini
     depends_on:
-      - nginx
-      - mysql
+      - nginx_symfony_training
+      - mysql_symfony_training
     environment:
       VIRTUAL_HOST: ${SYMFONY_VIRTUAL_HOST}
       XDEBUG_MODE: 1
@@ -32,12 +32,12 @@ services:
         aliases:
           - ${SYMFONY_VIRTUAL_HOST}
 
-  mysql:
+  mysql_symfony_training:
     build:
-      context: ./mariaDB
+      context: ./docker/mariaDB
     volumes:
       - ${DB_ROOT_DIRECTORY}:/var/lib/mysql
-    container_name: mysql
+    container_name: mysql_symfony_training
     ports:
       - "${DATABASE_PORTS}"
     environment:
