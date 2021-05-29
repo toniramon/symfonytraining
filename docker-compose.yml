@@ -1,0 +1,53 @@
+version: "3"
+services:
+  nginx:
+    container_name: nginx
+    image: jwilder/nginx-proxy:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    restart: unless-stopped
+    networks:
+      - symfonytraining
+
+  symfony:
+    container_name: symfony
+    build:
+      context: ./php
+      args:
+        - DOCUMENT_ROOT=/var/www/html
+        - UID=${UID}
+    volumes:
+      - ${SYMFONY_ROOT_DIRECTORY}:/var/www/html:cached
+      - ./php/settings/php.ini:/usr/local/etc/php/conf.d/custom.ini
+    depends_on:
+      - nginx
+      - mysql
+    environment:
+      VIRTUAL_HOST: ${SYMFONY_VIRTUAL_HOST}
+      XDEBUG_MODE: 1
+    networks:
+      symfonytraining:
+        aliases:
+          - ${SYMFONY_VIRTUAL_HOST}
+
+  mysql:
+    build:
+      context: ./mariaDB
+    volumes:
+      - ${DB_ROOT_DIRECTORY}:/var/lib/mysql
+    container_name: mysql
+    ports:
+      - "${DATABASE_PORTS}"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    restart: unless-stopped
+    expose:
+      - 3306
+    networks:
+      - symfonytraining
+
+networks:
+  symfonytraining:
+    driver: bridge
