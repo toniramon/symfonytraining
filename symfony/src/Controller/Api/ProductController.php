@@ -39,5 +39,6 @@ class ProductController extends AbstractFOSRestController
             return $product;
         }
 
+        return $form;
     }
 }

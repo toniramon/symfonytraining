@@ -1,0 +1,11 @@
+# config/validator/validation.yaml
+App\Entity\Product:
+  properties:
+    title:
+      - NotBlank: ~
+      - Length:
+          min: 3
+          max: 255
+          minMessage: 'Title must be at least {{ limit }} characters long'
+          maxMessage: 'Title cannot be longer than {{ limit }} characters'
+          allowEmptyString: false
