@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Product;
+use App\Repository\ProductRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,31 +13,52 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ProductController extends AbstractController
 {
-
-    private $logger;
-
-    public function __construct(LoggerInterface $logger)
+    /**
+     * @Route("product", name="products_get")
+     */
+    public function index(Request $request, ProductRepository $productRepository)
     {
-        $this->logger = $logger;
+        $title = $request->get('title', 'fallbackName');
+        $products = $productRepository->findAll();
+        $productsArray = [];
+        foreach($products as $product) {
+            $productsArray[] = [
+              'id' => $product->getId(),
+              'title' => $product->getTitle()
+            ];
+        }
+        $response = new JsonResponse();
+        $response->setData(
+            [
+                'success' => true,
+                'data' => $productsArray
+            ]
+        );
+        return $response;
     }
 
     /**
-     * @Route("product", name="product_list")
+     * @Route("product/create", name="product_create")
      */
-    public function index(Request $request)
-    {
-        $title = $request->get('title', 'fallbackName');
-        $this->logger->info("This is a test");
+    public function create(Request $request, EntityManagerInterface $em) {
+        $product = new Product();
+        $product->setTitle('Producto de prueba');
+        $product->setDescription('desc de prueba');
+
+        $em->persist($product);
+        $em->flush();
+
         $response = new JsonResponse();
         $response->setData(
             [
                 'success' => true,
                 'data' => [
-                    'id' => 1,
-                    'name' => $title
+                    'id' => $product->getId(),
+                    'title' => $product->getTitle()
                 ]
             ]
         );
+
         return $response;
     }
 }
