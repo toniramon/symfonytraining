@@ -4,7 +4,7 @@ namespace App\Controller\Api;
 
 use App\Entity\Product;
 use App\Repository\ProductRepository;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 
@@ -24,7 +24,7 @@ class ProductController extends AbstractFOSRestController
      * @Rest\Post(path = "/products")
      * @Rest\View(serializerGroups = {"product"}, serializerEnableMaxDepthChecks = true)
      */
-    public function postAction(EntityManager $em)
+    public function postAction(EntityManagerInterface $em)
     {
         $product = new Product();
         $product->setTitle('Fos rest bundle');
