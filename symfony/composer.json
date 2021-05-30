@@ -63,6 +63,12 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
+        ],
+        "cs": [
+            "vendor/bin/ecs check --ansi --no-interaction"
+        ],
+        "cs-fix": [
+            "vendor/bin/ecs check --fix --no-interaction"
         ]
     },
     "conflict": {
@@ -80,6 +86,7 @@
         "symfony/browser-kit": "^4.4",
         "symfony/css-selector": "^4.4",
         "symfony/maker-bundle": "^1.31",
-        "symfony/phpunit-bridge": "^5.2"
+        "symfony/phpunit-bridge": "^5.2",
+        "symplify/easy-coding-standard": "^9.3"
     }
 }

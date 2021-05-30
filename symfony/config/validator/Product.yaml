@@ -1,5 +1,5 @@
 # config/validator/validation.yaml
-App\Entity\Product:
+App\Form\Model\ProductDto:
   properties:
     title:
       - NotBlank: ~

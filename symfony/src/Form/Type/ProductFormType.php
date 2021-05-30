@@ -3,13 +3,11 @@
 
 namespace App\Form\Type;
 
+use App\Form\Model\ProductDto;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use App\Entity\Product;
 
 
 class ProductFormType extends AbstractType
@@ -24,7 +22,7 @@ class ProductFormType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class' => Product::class,
+                'data_class' => ProductDto::class,
             ]
         );
     }
