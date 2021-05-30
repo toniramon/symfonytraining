@@ -3,10 +3,12 @@
 namespace App\Controller\Api;
 
 use App\Entity\Product;
+use App\Form\Type\ProductFormType;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Symfony\Component\HttpFoundation\Request;
 
 class ProductController extends AbstractFOSRestController
 {
@@ -24,15 +26,18 @@ class ProductController extends AbstractFOSRestController
      * @Rest\Post(path = "/products")
      * @Rest\View(serializerGroups = {"product"}, serializerEnableMaxDepthChecks = true)
      */
-    public function postAction(EntityManagerInterface $em)
+    public function postAction(Request $request, EntityManagerInterface $em)
     {
         $product = new Product();
-        $product->setTitle('Fos rest bundle');
-        $product->setDescription('desc de prueba');
+        $form = $this->createForm(ProductFormType::class, $product);
+        $form->handleRequest($request);
 
-        $em->persist($product);
-        $em->flush();
+        if ($form->isSubmitted() && $form->isValid()){
+            $em->persist($product);
+            $em->flush();
 
-        return $product;
+            return $product;
+        }
+
     }
 }
