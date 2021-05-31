@@ -16,3 +16,4 @@ App\Entity\Product:
         inversedBy: products
         joinColumn:
           nullable: false
+        groups: ['product']

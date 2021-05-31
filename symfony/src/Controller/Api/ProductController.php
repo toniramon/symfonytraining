@@ -20,9 +20,18 @@ class ProductController extends AbstractFOSRestController
      * @Rest\Get(path="/products")
      * @Rest\View(serializerGroups={"product"}, serializerEnableMaxDepthChecks=true)
      */
-    public function getAction(ProductRepository $productRepository)
+    public function getAction(ProductRepository $productRepository, CategoryRepository $categoryRepository)
     {
-        return $productRepository->findAll();
+        $products = $productRepository->findAll();
+
+        // Set relationship. // Not working. Need to be setted on Serializer
+        foreach($products as $product) {
+            if ($product->getCategory() !== null) {
+                $product->category = $categoryRepository->find($product->getCategory());
+            }
+        }
+        return $products;
+
     }
 
     /**
@@ -57,5 +66,16 @@ class ProductController extends AbstractFOSRestController
         }
 
         return $form;
+    }
+
+    /**
+     * @Rest\Get(path="/products/featured")
+     * @Rest\View(serializerGroups={"product"}, serializerEnableMaxDepthChecks=true)
+     */
+    public function getFeaturedAction(ProductRepository $productRepository, CategoryRepository $categoryRepository)
+    {
+        $products = $productRepository->findBy(['featured' => true]);
+        return $products;
+
     }
 }

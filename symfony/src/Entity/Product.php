@@ -44,7 +44,7 @@ class Product
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="products")
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
-    private $category;
+    public $category;
 
 
     public function getId(): ?int
