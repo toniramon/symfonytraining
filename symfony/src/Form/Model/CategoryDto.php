@@ -4,7 +4,8 @@
 namespace App\Form\Model;
 
 
-class ProductDto
+class CategoryDto
 {
     public $name;
+    public $description;
 }

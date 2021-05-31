@@ -1,7 +1,6 @@
 {
-  "name": "$name$",
-  "version": "$version$",
+  "name": "packages",
+  "version": "1.0.0",
   "dependencies": {
-    $END$
   }
 }

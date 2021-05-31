@@ -2,5 +2,11 @@ App\Entity\Product:
   attributes:
     id:
       groups: ['product']
-    title:
+    name:
+      groups: ['product']
+    price:
+      groups: ['product']
+    currency:
+      groups: ['product']
+    featured:
       groups: ['product']
