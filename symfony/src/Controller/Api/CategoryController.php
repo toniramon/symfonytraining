@@ -9,6 +9,7 @@ use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class CategoryController extends AbstractFOSRestController
@@ -37,6 +38,7 @@ class CategoryController extends AbstractFOSRestController
             $category = new Category();
             $category->setName($categoryDto->name);
             $category->setDescription($categoryDto->description);
+
             $em->persist($category);
             $em->flush();
 
@@ -44,5 +46,50 @@ class CategoryController extends AbstractFOSRestController
         }
 
         return $form;
+    }
+
+    /**
+     * @Rest\Put(path="/category/{id}")
+     * @Rest\View(serializerGroups={"category"}, serializerEnableMaxDepthChecks=true)
+     */
+    public function putAction(Request $request, EntityManagerInterface $em, CategoryRepository $categoryRepository)
+    {
+        // Get Category
+        $category = $categoryRepository->find($request->get('id'));
+        $categoryName = $request->get('name');
+        $categoryDescription = $request->get('description');
+
+        if ($category) {
+            $category->setName($categoryName);
+            $category->setDescription($categoryDescription);
+
+            $em->persist($category);
+            $em->flush();
+
+            return $category;
+            }
+
+        return new JsonResponse(['errors' => true, 'message' => 'Category not found'], 404, ['application/json']);
+
+    }
+
+    /**
+     * @Rest\Delete(path="/category/{id}")
+     * @Rest\View(serializerGroups={"category"}, serializerEnableMaxDepthChecks=true)
+     */
+    public function deleteAction(Request $request, EntityManagerInterface $em, CategoryRepository $categoryRepository)
+    {
+        // Get Category
+        $category = $categoryRepository->find($request->get('id'));
+
+        if ($category) {
+            $em->remove($category);
+            $em->flush();
+
+            return $category;
+        }
+
+        return new JsonResponse(['errors' => true, 'message' => 'Category not found'], 404, ['application/json']);
+
     }
 }
