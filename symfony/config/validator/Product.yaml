@@ -9,3 +9,6 @@ App\Form\Model\ProductDto:
           minMessage: 'Title must be at least {{ limit }} characters long'
           maxMessage: 'Title cannot be longer than {{ limit }} characters'
           allowEmptyString: false
+    price:
+      - NotBlank: ~
+      - Positive: ~

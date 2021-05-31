@@ -3,8 +3,10 @@
 namespace App\Controller\Api;
 
 use App\Entity\Product;
+use App\Entity\Category;
 use App\Form\Model\ProductDto;
 use App\Form\Type\ProductFormType;
+use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -27,7 +29,7 @@ class ProductController extends AbstractFOSRestController
      * @Rest\Post(path = "/product")
      * @Rest\View(serializerGroups = {"product"}, serializerEnableMaxDepthChecks = true)
      */
-    public function postAction(Request $request, EntityManagerInterface $em)
+    public function postAction(Request $request, EntityManagerInterface $em, CategoryRepository $categoryRepository)
     {
         $productDto = new ProductDto();
         $form = $this->createForm(ProductFormType::class, $productDto);
@@ -35,7 +37,19 @@ class ProductController extends AbstractFOSRestController
 
         if ($form->isSubmitted() && $form->isValid()){
             $product = new Product();
-            $product->setTitle($productDto->title);
+            $product->setName($productDto->name);
+            $product->setPrice($productDto->price);
+            $product->setCurrency($productDto->currency);
+            $product->setFeatured($productDto->featured);
+
+            // If there is a category, create it.
+            $category = $categoryRepository->find($productDto->category);
+
+            // relates this product to the category
+            if ($category){
+                $product->setCategory($category);
+            }
+
             $em->persist($product);
             $em->flush();
 

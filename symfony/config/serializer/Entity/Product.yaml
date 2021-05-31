@@ -10,3 +10,9 @@ App\Entity\Product:
       groups: ['product']
     featured:
       groups: ['product']
+    manyToOne:
+      category:
+        targetEntity: App\Entity\Category
+        inversedBy: products
+        joinColumn:
+          nullable: false

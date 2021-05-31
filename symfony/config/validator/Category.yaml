@@ -1,5 +1,5 @@
 # config/validator/validation.yaml
-App\Form\Model\ProductDto:
+App\Form\Model\CategoryDto:
   properties:
     name:
       - NotBlank: ~
