@@ -70,6 +70,13 @@
         ],
         "cs-fix": [
             "vendor/bin/ecs check --fix --no-interaction"
+        ],
+        "phpstan-analyse": [
+            "vendor/bin/phpstan analyse src tests migrations --level=4"
+        ],
+        "precommit": [
+            "vendor/bin/ecs check --ansi --no-interaction",
+            "vendor/bin/phpstan analyse src tests migrations --level=4"
         ]
     },
     "conflict": {
@@ -82,6 +89,7 @@
         }
     },
     "require-dev": {
+        "phpstan/phpstan": "^0.12.88",
         "phpunit/phpunit": "^9.5",
         "roave/security-advisories": "dev-latest",
         "symfony/browser-kit": "^4.4",
