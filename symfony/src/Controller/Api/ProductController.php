@@ -76,23 +76,11 @@ class ProductController extends AbstractFOSRestController
      * @Rest\Get(path="/products/featured")
      * @Rest\View(serializerGroups={"product"}, serializerEnableMaxDepthChecks=true)
      */
-    public function getFeaturedAction(ProductRepository $productRepository, CategoryRepository $categoryRepository)
+    public function getFeaturedAction(Request $request, ProductRepository $productRepository, CategoryRepository $categoryRepository)
     {
 
-        $api_key = $_ENV["EXCHANGE_API_KEY"];
-
-        $client = HttpClient::create();
-        $response = $client->request('GET', 'http://api.exchangeratesapi.io/v1/latest?symbols=EUR,USD&access_key=' . $api_key);
-
-        // $contentType = 'application/json'
-        $content = $response->getContent();
-
-        // Having EUR as base.
-        $data = json_decode($content);
-        $rates = $data->rates;
-
         
-        
+        $exchangeCurrenciesWithValues = $this->getExchangecurrencies();
 
         $products = $productRepository->findBy(['featured' => true]);
 
@@ -101,14 +89,39 @@ class ProductController extends AbstractFOSRestController
        if ($currencyFilter) {
             // Get from api the exchange.
             foreach($products as $product) {
-               if ($product->currency === !$currencyFilter) {
-                    // Service.
-               }
+                $newPrice = $this->calculateExchangePrice($exchangeCurrenciesWithValues, $product->getCurrency(), $currencyFilter, $product->getPrice()); 
+                $product->setPrice($newPrice);
+                $product->setCurrency($currencyFilter);
            }
         }
 
-
         return $products;
+    }
 
+    private function getExchangecurrencies(){
+        $api_key = $_ENV["EXCHANGE_API_KEY"];
+
+        $client = HttpClient::create();
+        $response = $client->request('GET', 'http://api.exchangeratesapi.io/v1/latest?symbols=EUR,USD&access_key=' . $api_key);
+
+        // Get content
+        $content = $response->getContent();
+
+        // Return list of rates
+        $data = json_decode($content);
+        return $data->rates;
+    }
+
+    private function calculateExchangePrice($exchangeCurrenciesWithValues, $fromCurrency, $toCurrency, $price){
+
+        if ($fromCurrency === $toCurrency){
+            return $price;
+        } 
+
+        if($exchangeCurrenciesWithValues->$fromCurrency > $exchangeCurrenciesWithValues->$toCurrency) {
+            return round($price / $exchangeCurrenciesWithValues->$fromCurrency, 2);
+        } else {
+            return round($price * $exchangeCurrenciesWithValues->$toCurrency, 2);
+        }
     }
 }
