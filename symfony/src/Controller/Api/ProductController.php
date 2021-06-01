@@ -12,6 +12,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Request;
+use App\Service\ExchangeAPI\GetExchangeCurrencies;
+use App\Service\Utils\HttpClientInterface;
+use Symfony\Component\HttpClient\HttpClient;
+
 
 class ProductController extends AbstractFOSRestController
 {
@@ -74,7 +78,36 @@ class ProductController extends AbstractFOSRestController
      */
     public function getFeaturedAction(ProductRepository $productRepository, CategoryRepository $categoryRepository)
     {
+
+        $api_key = $_ENV["EXCHANGE_API_KEY"];
+
+        $client = HttpClient::create();
+        $response = $client->request('GET', 'http://api.exchangeratesapi.io/v1/latest?symbols=EUR,USD&access_key=' . $api_key);
+
+        // $contentType = 'application/json'
+        $content = $response->getContent();
+
+        // Having EUR as base.
+        $data = json_decode($content);
+        $rates = $data->rates;
+
+        
+        
+
         $products = $productRepository->findBy(['featured' => true]);
+
+        $currencyFilter = $request->query->get('currency');
+
+       if ($currencyFilter) {
+            // Get from api the exchange.
+            foreach($products as $product) {
+               if ($product->currency === !$currencyFilter) {
+                    // Service.
+               }
+           }
+        }
+
+
         return $products;
 
     }
