@@ -41,10 +41,11 @@ class Product
     private $featured;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="products")
+     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="products", fetch="EAGER")
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     public $category;
+    private $category_name;
 
 
     public function getId(): ?int
@@ -110,5 +111,17 @@ class Product
         $this->category = $category;
 
         return $this;
+    }
+
+    public function setCategoryName($categoryName)
+    {
+        $this->category_name = $categoryName;
+
+        return $this;
+    }
+
+    public function getCategoryName()
+    {
+        return $this->category_name;
     }
 }

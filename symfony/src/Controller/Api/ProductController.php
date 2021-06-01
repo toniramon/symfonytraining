@@ -30,7 +30,10 @@ class ProductController extends AbstractFOSRestController
         // Set relationship. // Not working. Need to be setted on Serializer
         foreach($products as $product) {
             if ($product->getCategory() !== null) {
-                $product->category = $categoryRepository->find($product->getCategory());
+                $category = $product->getCategory();
+                $categoryName = $category->getName();
+
+                $product->setCategoryName($categoryName);
             }
         }
 
