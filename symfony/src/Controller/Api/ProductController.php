@@ -100,9 +100,10 @@ class ProductController extends AbstractFOSRestController
 
     private function getExchangecurrencies(){
         $api_key = $_ENV["EXCHANGE_API_KEY"];
-
+        $exchange_api_url = $_ENV["EXCHANGE_API_URL"];
+        
         $client = HttpClient::create();
-        $response = $client->request('GET', 'http://api.exchangeratesapi.io/v1/latest?symbols=EUR,USD&access_key=' . $api_key);
+        $response = $client->request('GET', $exchange_api_url . '/latest?symbols=EUR,USD&access_key=' . $api_key);
 
         // Get content
         $content = $response->getContent();
