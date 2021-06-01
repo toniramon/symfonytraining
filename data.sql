@@ -8,7 +8,7 @@ INSERT INTO category (name, description) VALUES ('Macbook Air', 'New line of low
 INSERT INTO category (name, description) VALUES ('iMac', 'Line of all in one computers');
 INSERT INTO category (name, description) VALUES ('iPhone', 'High-end mobile');
 
-DELETE from category;
+DELETE from product;
 
 -- Insert products
 INSERT INTO product (category_id, name, price, currency, featured) VALUES (1, 'Macbook Pro M1 2020 13 inch', 1699.90, 'USD', true);
