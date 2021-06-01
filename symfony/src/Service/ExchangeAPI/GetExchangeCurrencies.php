@@ -12,8 +12,4 @@ class GetExchangeCurrencies
     {
         $this->httpClient = $httpClient;
     }
-
-    public function __invoke()
-    {
-    }
 }

@@ -33,8 +33,10 @@ class ProductController extends AbstractFOSRestController
                 $product->category = $categoryRepository->find($product->getCategory());
             }
         }
-        return $products;
 
+        // This can be refactored as:
+        // $data = ['success' => true, 'data' => $products];
+        return $products;
     }
 
     /**
@@ -78,7 +80,6 @@ class ProductController extends AbstractFOSRestController
     public function getFeaturedAction(Request $request, ProductRepository $productRepository, CategoryRepository $categoryRepository)
     {
 
-        
         $exchangeCurrenciesWithValues = $this->getExchangecurrencies();
 
         $products = $productRepository->findBy(['featured' => true]);
