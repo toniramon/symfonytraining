@@ -1,9 +1,7 @@
+
 # symfonytraining
 Symfony API Rest training
 
-
-- host: add 
-127.0.0.1   dev.symfonytraining.com
 
 - Key factors:
     - Added docker container.
@@ -20,3 +18,13 @@ Symfony API Rest training
     - Buenas Prácticas (Scafolding Domain based, SOLID, DRY)
     - Added Postman Collection with all endpoints
     - Composer check for psr12 and autofix.
+  
+Commands used
+
+DB Related
+- php bin/console doctrine:database:create
+- php bin/console doctrine:migrations:diff
+- php bin/console doctrine:migrations:migrate
+
+Tests
+- vendor/bin/phpunit —testdox tests/
