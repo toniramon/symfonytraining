@@ -13,7 +13,6 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Request;
 use App\Service\ExchangeAPI\GetExchangeCurrencies;
-use App\Service\Utils\HttpClientInterface;
 use Symfony\Component\HttpClient\HttpClient;
 
 

@@ -3,7 +3,6 @@
 namespace App\Service\ExchangeAPI;
 
 use App\Service\Utils\HttpClientInterface;
-use App\Service\Utils\HttpClient;
 
 class GetExchangeCurrencies
 {
